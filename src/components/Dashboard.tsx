@@ -1,4 +1,4 @@
-import { BarChart3, Mail, Users, TrendingUp, Play, Clock, CheckCircle, AlertCircle, FileText } from "lucide-react";
+import { BarChart3, Mail, Users, TrendingUp, Play, Clock, CheckCircle, AlertCircle, FileText, Plus, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function Dashboard() {
@@ -38,6 +38,19 @@ export function Dashboard() {
     { name: "Customer Success Follow-up", status: "paused", sent: 189, replies: 23, rate: "12.2%" },
     { name: "New Feature Announcement", status: "completed", sent: 567, replies: 45, rate: "7.9%" },
     { name: "Partnership Outreach", status: "active", sent: 123, replies: 8, rate: "6.5%" },
+  ];
+
+  const savedDrafts = [
+    { id: 1, name: "SaaS Founder Sequence", lastSaved: "2 hours ago", step: "Create Sequence" },
+    { id: 2, name: "Enterprise Outreach", lastSaved: "1 day ago", step: "Add Leads" },
+    { id: 3, name: "Product Demo Campaign", lastSaved: "3 days ago", step: "Name Campaign" }
+  ];
+
+  const campaignStats = [
+    { title: "Open Rate", value: "32.4%", trend: "+5.2%", color: "text-neon-blue" },
+    { title: "Click Rate", value: "8.7%", trend: "+1.8%", color: "text-neon-purple" },
+    { title: "Reply Rate", value: "18.5%", trend: "+2.3%", color: "text-neon-green" },
+    { title: "Bounce Rate", value: "2.1%", trend: "-0.8%", color: "text-neon-pink" }
   ];
 
   const getStatusIcon = (status: string) => {
@@ -94,6 +107,32 @@ export function Dashboard() {
         ))}
       </div>
 
+      {/* Saved Drafts Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-dark-text">Resume Campaign Drafts</h2>
+          <button className="text-neon-blue hover:text-neon-purple transition-colors text-sm">
+            View All
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {savedDrafts.map((draft) => (
+            <Card key={draft.id} className="cyber-card hover:neon-glow transition-all duration-300 cursor-pointer">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-medium text-dark-text">{draft.name}</h3>
+                  <span className="text-xs text-neon-blue">{draft.step}</span>
+                </div>
+                <p className="text-sm text-dark-muted mb-3">Last saved {draft.lastSaved}</p>
+                <button className="cyber-button w-full text-sm py-2">
+                  Continue
+                </button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+
       {/* Campaign Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="cyber-card lg:col-span-2">
@@ -110,42 +149,61 @@ export function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cyber-card">
-          <CardHeader>
-            <CardTitle className="text-dark-text">Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-blue/10 transition-colors">
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-neon-blue" />
-                <div>
-                  <p className="font-medium text-dark-text">Create Campaign</p>
-                  <p className="text-sm text-dark-muted">Start a new email sequence</p>
+        <div className="space-y-4">
+          <Card className="cyber-card">
+            <CardHeader>
+              <CardTitle className="text-dark-text">Campaign Stats Preview</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {campaignStats.map((stat, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                  <div>
+                    <p className="text-sm text-dark-muted">{stat.title}</p>
+                    <p className={`text-lg font-bold ${stat.color}`}>{stat.value}</p>
+                  </div>
+                  <span className="text-neon-green text-sm font-medium">{stat.trend}</span>
                 </div>
-              </div>
-            </button>
-            
-            <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-purple/10 transition-colors">
-              <div className="flex items-center space-x-3">
-                <Users className="w-5 h-5 text-neon-purple" />
-                <div>
-                  <p className="font-medium text-dark-text">Import Leads</p>
-                  <p className="text-sm text-dark-muted">Upload your contact list</p>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="cyber-card">
+            <CardHeader>
+              <CardTitle className="text-dark-text">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-blue/10 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-neon-blue" />
+                  <div>
+                    <p className="font-medium text-dark-text">Create Campaign</p>
+                    <p className="text-sm text-dark-muted">Start a new email sequence</p>
+                  </div>
                 </div>
-              </div>
-            </button>
-            
-            <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-green/10 transition-colors">
-              <div className="flex items-center space-x-3">
-                <FileText className="w-5 h-5 text-neon-green" />
-                <div>
-                  <p className="font-medium text-dark-text">Email Templates</p>
-                  <p className="text-sm text-dark-muted">Manage your templates</p>
+              </button>
+              
+              <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-purple/10 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <Users className="w-5 h-5 text-neon-purple" />
+                  <div>
+                    <p className="font-medium text-dark-text">Import Leads</p>
+                    <p className="text-sm text-dark-muted">Upload your contact list</p>
+                  </div>
                 </div>
-              </div>
-            </button>
-          </CardContent>
-        </Card>
+              </button>
+              
+              <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-green/10 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <FileText className="w-5 h-5 text-neon-green" />
+                  <div>
+                    <p className="font-medium text-dark-text">Email Templates</p>
+                    <p className="text-sm text-dark-muted">Manage your templates</p>
+                  </div>
+                </div>
+              </button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Recent Campaigns */}
