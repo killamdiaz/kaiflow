@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,20 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom HALO-inspired colors
+				neon: {
+					blue: '#00d4ff',
+					purple: '#8b5cf6',
+					pink: '#ec4899',
+					green: '#10b981',
+				},
+				dark: {
+					bg: '#0a0a0b',
+					card: '#111113',
+					border: '#1f1f23',
+					text: '#e4e4e7',
+					muted: '#71717a',
 				}
 			},
 			borderRadius: {
@@ -84,11 +99,38 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'glow-pulse': {
+					'0%, 100%': {
+						boxShadow: '0 0 20px rgba(0, 212, 255, 0.3)'
+					},
+					'50%': {
+						boxShadow: '0 0 40px rgba(0, 212, 255, 0.6)'
+					}
+				},
+				'neon-pulse': {
+					'0%, 100%': {
+						textShadow: '0 0 10px rgba(0, 212, 255, 0.8)'
+					},
+					'50%': {
+						textShadow: '0 0 20px rgba(0, 212, 255, 1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+				'neon-pulse': 'neon-pulse 2s ease-in-out infinite'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'neon-glow': 'linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+			},
+			boxShadow: {
+				'neon-blue': '0 0 20px rgba(0, 212, 255, 0.3)',
+				'neon-purple': '0 0 20px rgba(139, 92, 246, 0.3)',
+				'glow': '0 0 40px rgba(0, 212, 255, 0.15)',
 			}
 		}
 	},
