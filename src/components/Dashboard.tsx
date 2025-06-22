@@ -1,5 +1,4 @@
-
-import { BarChart3, Mail, Users, TrendingUp, Play, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { BarChart3, Mail, Users, TrendingUp, Play, Clock, CheckCircle, AlertCircle, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function Dashboard() {
