@@ -1,8 +1,10 @@
-
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Sparkles, Upload, Eye, Rocket, Save, Bot } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { EmailFeedbackPanel } from "./EmailFeedbackPanel";
+import { ABTestToggle } from "./ABTestToggle";
+import { SmartSendTime } from "./SmartSendTime";
 
 interface CampaignWizardProps {
   onBack: () => void;
@@ -34,6 +36,8 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
     leads: []
   });
   const [isLaunched, setIsLaunched] = useState(false);
+  const [showEmailFeedback, setShowEmailFeedback] = useState(false);
+  const [selectedEmailForFeedback, setSelectedEmailForFeedback] = useState<any>(null);
 
   const steps = [
     { id: 1, title: "Name Campaign", description: "Set up basic details" },
@@ -71,6 +75,19 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
       ...campaignData,
       emails: [...campaignData.emails, newEmail]
     });
+  };
+
+  const handleABTestToggle = (emailId: number, enabled: boolean) => {
+    console.log(`A/B testing ${enabled ? 'enabled' : 'disabled'} for email ${emailId}`);
+  };
+
+  const handleSmartSendTimeToggle = (enabled: boolean, settings: any) => {
+    console.log('Smart send time:', enabled, settings);
+  };
+
+  const openEmailFeedback = (email: any) => {
+    setSelectedEmailForFeedback(email);
+    setShowEmailFeedback(true);
   };
 
   const renderStepContent = () => {
@@ -135,11 +152,20 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
                         </div>
                         {index === 0 ? "Initial Email" : `Follow-up ${index}`}
                       </CardTitle>
-                      {index > 0 && (
-                        <div className="text-sm text-neon-blue">
-                          Send after {email.delay} days
-                        </div>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        {index > 0 && (
+                          <div className="text-sm text-neon-blue">
+                            Send after {email.delay} days
+                          </div>
+                        )}
+                        <button 
+                          onClick={() => openEmailFeedback(email)}
+                          className="text-neon-purple hover:text-neon-blue transition-colors text-sm flex items-center"
+                        >
+                          <Sparkles className="w-4 h-4 mr-1" />
+                          Improve Copy
+                        </button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -176,6 +202,9 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
                         Available tokens: {'{firstName}'}, {'{lastName}'}, {'{company}'}, {'{title}'}
                       </div>
                     </div>
+
+                    {/* A/B Testing Toggle */}
+                    <ABTestToggle emailId={email.id} onToggle={handleABTestToggle} />
 
                     {index > 0 && (
                       <div>
@@ -290,6 +319,9 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
               </Card>
             </div>
 
+            {/* Smart Send Time Optimization */}
+            <SmartSendTime onToggle={handleSmartSendTimeToggle} />
+
             <div className="flex justify-center space-x-4">
               <button className="bg-dark-card border border-dark-border text-dark-text hover:bg-dark-border transition-colors px-8 py-3 rounded-lg font-semibold">
                 <Eye className="w-4 h-4 mr-2 inline" />
@@ -361,6 +393,14 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
 
   return (
     <div className="p-6 space-y-6 min-h-screen">
+      {/* Email Feedback Panel */}
+      <EmailFeedbackPanel 
+        isOpen={showEmailFeedback}
+        onClose={() => setShowEmailFeedback(false)}
+        emailContent={selectedEmailForFeedback?.content || ""}
+        subject={selectedEmailForFeedback?.subject || ""}
+      />
+
       {/* Header */}
       <div className="flex items-center space-x-4">
         <button 

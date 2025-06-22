@@ -1,8 +1,9 @@
-
 import { useState } from "react";
 import { Plus, Upload, Download, Filter, Search, MoreHorizontal, Tag, Users, Mail, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LeadQualityScore } from "./LeadQualityScore";
+import { LeadFatigueTracker } from "./LeadFatigueTracker";
 
 export function Leads() {
   const [selectedLeads, setSelectedLeads] = useState<number[]>([]);
@@ -17,18 +18,36 @@ export function Leads() {
       title: "CEO",
       status: "new",
       lastActivity: "2 hours ago",
-      tags: ["Enterprise", "Hot Lead"]
+      tags: ["Enterprise", "Hot Lead"],
+      qualityScore: 5,
+      qualityFactors: {
+        companySize: 250,
+        funding: "Series B",
+        relevance: 5,
+        engagement: 4
+      },
+      campaignCount: 1,
+      lastContactDays: 0
     },
     {
       id: 2,
       firstName: "Sarah",
-      lastName: "Johnson",
+      lastName: "Johnson", 
       email: "sarah.j@techstart.io",
       company: "TechStart",
       title: "CTO",
       status: "contacted",
       lastActivity: "1 day ago",
-      tags: ["Startup", "Tech"]
+      tags: ["Startup", "Tech"],
+      qualityScore: 4,
+      qualityFactors: {
+        companySize: 15,
+        funding: "Seed",
+        relevance: 4,
+        engagement: 5
+      },
+      campaignCount: 2,
+      lastContactDays: 5
     },
     {
       id: 3,
@@ -38,8 +57,17 @@ export function Leads() {
       company: "Global Corp",
       title: "Marketing Director",
       status: "replied",
-      lastActivity: "3 days ago",
-      tags: ["Enterprise", "Marketing"]
+      lastActivity: "3 days ago", 
+      tags: ["Enterprise", "Marketing"],
+      qualityScore: 3,
+      qualityFactors: {
+        companySize: 500,
+        funding: "Public",
+        relevance: 3,
+        engagement: 3
+      },
+      campaignCount: 4,
+      lastContactDays: 15
     },
     {
       id: 4,
@@ -50,7 +78,16 @@ export function Leads() {
       title: "VP Sales",
       status: "bounced",
       lastActivity: "1 week ago",
-      tags: ["Sales", "B2B"]
+      tags: ["Sales", "B2B"],
+      qualityScore: 2,
+      qualityFactors: {
+        companySize: 50,
+        funding: "Bootstrap",
+        relevance: 2,
+        engagement: 1
+      },
+      campaignCount: 6,
+      lastContactDays: 8
     }
   ];
 
@@ -118,11 +155,11 @@ export function Leads() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-dark-muted text-sm font-medium">New This Week</p>
+                <p className="text-dark-muted text-sm font-medium">Hot Leads</p>
                 <p className="text-2xl font-bold text-dark-text mt-1">83</p>
               </div>
               <div className="p-3 rounded-lg bg-neon-green/20">
-                <Plus className="w-6 h-6 text-neon-green" />
+                <TrendingUp className="w-6 h-6 text-neon-green" />
               </div>
             </div>
           </CardContent>
@@ -146,8 +183,8 @@ export function Leads() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-dark-muted text-sm font-medium">Conversion Rate</p>
-                <p className="text-2xl font-bold text-dark-text mt-1">12.5%</p>
+                <p className="text-dark-muted text-sm font-medium">Avg Quality Score</p>
+                <p className="text-2xl font-bold text-dark-text mt-1">3.5/5</p>
               </div>
               <div className="p-3 rounded-lg bg-neon-pink/20">
                 <TrendingUp className="w-6 h-6 text-neon-pink" />
@@ -224,6 +261,8 @@ export function Leads() {
                   <th className="text-left py-3 text-dark-muted font-medium">Email</th>
                   <th className="text-left py-3 text-dark-muted font-medium">Company</th>
                   <th className="text-left py-3 text-dark-muted font-medium">Title</th>
+                  <th className="text-left py-3 text-dark-muted font-medium">Quality</th>
+                  <th className="text-left py-3 text-dark-muted font-medium">Fatigue</th>
                   <th className="text-left py-3 text-dark-muted font-medium">Status</th>
                   <th className="text-left py-3 text-dark-muted font-medium">Tags</th>
                   <th className="text-left py-3 text-dark-muted font-medium">Last Activity</th>
@@ -249,6 +288,19 @@ export function Leads() {
                     <td className="py-4 text-dark-text">{lead.email}</td>
                     <td className="py-4 text-dark-text">{lead.company}</td>
                     <td className="py-4 text-dark-muted">{lead.title}</td>
+                    <td className="py-4">
+                      <LeadQualityScore 
+                        score={lead.qualityScore} 
+                        factors={lead.qualityFactors}
+                      />
+                    </td>
+                    <td className="py-4">
+                      <LeadFatigueTracker 
+                        campaignCount={lead.campaignCount}
+                        lastContactDays={lead.lastContactDays}
+                        replyStatus={lead.status === "replied" ? "replied" : "no-reply"}
+                      />
+                    </td>
                     <td className="py-4">
                       <span className={getStatusClass(lead.status)}>
                         {lead.status}
