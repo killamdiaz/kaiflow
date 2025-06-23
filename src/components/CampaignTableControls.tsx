@@ -7,6 +7,7 @@ interface Column {
   key: string;
   label: string;
   visible: boolean;
+  width?: number;
 }
 
 interface CampaignTableControlsProps {
@@ -16,6 +17,7 @@ interface CampaignTableControlsProps {
   onStatusFilterChange: (value: string) => void;
   columns: Column[];
   onColumnToggle: (key: string) => void;
+  onColumnResize?: (key: string, width: number) => void;
 }
 
 export function CampaignTableControls({
@@ -24,7 +26,8 @@ export function CampaignTableControls({
   statusFilter,
   onStatusFilterChange,
   columns,
-  onColumnToggle
+  onColumnToggle,
+  onColumnResize
 }: CampaignTableControlsProps) {
   const [showColumnMenu, setShowColumnMenu] = useState(false);
 
@@ -44,7 +47,7 @@ export function CampaignTableControls({
       <select 
         value={statusFilter}
         onChange={(e) => onStatusFilterChange(e.target.value)}
-        className="cyber-input w-auto"
+        className="cyber-input w-auto min-w-[140px]"
       >
         <option value="all">All Status</option>
         <option value="active">Active</option>
@@ -56,7 +59,7 @@ export function CampaignTableControls({
       <div className="relative">
         <Button
           variant="outline"
-          className="bg-dark-card border-dark-border text-dark-text hover:bg-dark-border"
+          className="bg-dark-card border-dark-border text-dark-text hover:bg-dark-border hover:border-neon-blue/50"
           onClick={() => setShowColumnMenu(!showColumnMenu)}
         >
           <Columns className="w-4 h-4 mr-2" />
@@ -65,18 +68,30 @@ export function CampaignTableControls({
         
         {showColumnMenu && (
           <div className="absolute top-full right-0 mt-2 w-64 bg-dark-card border border-dark-border rounded-lg shadow-lg z-10">
-            <div className="p-4 space-y-2">
+            <div className="p-4 space-y-3">
               <h4 className="font-medium text-dark-text mb-3">Show/Hide Columns</h4>
               {columns.map((column) => (
-                <label key={column.key} className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={column.visible}
-                    onChange={() => onColumnToggle(column.key)}
-                    className="w-4 h-4 rounded border-dark-border"
-                  />
-                  <span className="text-sm text-dark-text">{column.label}</span>
-                </label>
+                <div key={column.key} className="flex items-center justify-between">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={column.visible}
+                      onChange={() => onColumnToggle(column.key)}
+                      className="w-4 h-4 rounded border-dark-border bg-dark-bg checked:bg-neon-blue"
+                    />
+                    <span className="text-sm text-dark-text">{column.label}</span>
+                  </label>
+                  {column.visible && onColumnResize && (
+                    <input
+                      type="range"
+                      min="100"
+                      max="300"
+                      value={column.width || 150}
+                      onChange={(e) => onColumnResize(column.key, parseInt(e.target.value))}
+                      className="w-16 ml-2"
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </div>

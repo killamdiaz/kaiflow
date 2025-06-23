@@ -1,3 +1,4 @@
+
 import { BarChart3, Mail, Users, TrendingUp, Play, Clock, CheckCircle, AlertCircle, FileText, Plus, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -77,15 +78,15 @@ export function Dashboard() {
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'active': return 'status-badge status-active';
-      case 'paused': return 'status-badge status-paused';
-      case 'completed': return 'status-badge bg-neon-green/20 text-neon-green border border-neon-green/30';
-      default: return 'status-badge bg-gray-500/20 text-gray-400 border border-gray-500/30';
+      case 'active': return 'bg-neon-blue/20 text-neon-blue border border-neon-blue/30 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1';
+      case 'paused': return 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1';
+      case 'completed': return 'bg-neon-green/20 text-neon-green border border-neon-green/30 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1';
+      default: return 'bg-gray-500/20 text-gray-400 border border-gray-500/30 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1';
     }
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-dark-bg text-dark-text min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -104,7 +105,7 @@ export function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
-          <Card key={index} className="cyber-card hover:neon-glow transition-all duration-300">
+          <Card key={index} className="bg-dark-card/80 border-dark-border hover:border-neon-blue/30 transition-all duration-300">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -133,7 +134,7 @@ export function Dashboard() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {savedDrafts.map((draft) => (
-            <Card key={draft.id} className="cyber-card hover:neon-glow transition-all duration-300 cursor-pointer">
+            <Card key={draft.id} className="bg-dark-card/80 border-dark-border hover:border-neon-blue/30 transition-all duration-300 cursor-pointer">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-medium text-dark-text">{draft.name}</h3>
@@ -151,7 +152,7 @@ export function Dashboard() {
 
       {/* Campaign Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="cyber-card lg:col-span-2">
+        <Card className="bg-dark-card/80 border-dark-border lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-dark-text">Campaign Performance</CardTitle>
           </CardHeader>
@@ -194,7 +195,7 @@ export function Dashboard() {
         </Card>
 
         <div className="space-y-4">
-          <Card className="cyber-card">
+          <Card className="bg-dark-card/80 border-dark-border">
             <CardHeader>
               <CardTitle className="text-dark-text">Campaign Stats Preview</CardTitle>
             </CardHeader>
@@ -211,7 +212,7 @@ export function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="cyber-card">
+          <Card className="bg-dark-card/80 border-dark-border">
             <CardHeader>
               <CardTitle className="text-dark-text">Quick Actions</CardTitle>
             </CardHeader>
@@ -260,35 +261,35 @@ export function Dashboard() {
       </div>
 
       {/* Recent Campaigns */}
-      <Card className="cyber-card">
+      <Card className="bg-dark-card/80 border-dark-border">
         <CardHeader>
           <CardTitle className="text-dark-text">Recent Campaigns</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="border-b border-dark-border">
-                  <th className="text-left py-3 text-dark-muted font-medium">Campaign</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Status</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Sent</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Replies</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Reply Rate</th>
+                  <th className="text-left py-4 px-6 text-dark-muted font-medium">Campaign</th>
+                  <th className="text-left py-4 px-6 text-dark-muted font-medium">Status</th>
+                  <th className="text-left py-4 px-6 text-dark-muted font-medium">Sent</th>
+                  <th className="text-left py-4 px-6 text-dark-muted font-medium">Replies</th>
+                  <th className="text-left py-4 px-6 text-dark-muted font-medium">Reply Rate</th>
                 </tr>
               </thead>
               <tbody>
                 {recentCampaigns.map((campaign, index) => (
                   <tr key={index} className="border-b border-dark-border/50 hover:bg-dark-card/50 transition-colors">
-                    <td className="py-4 text-dark-text font-medium">{campaign.name}</td>
-                    <td className="py-4">
+                    <td className="py-4 px-6 text-dark-text font-medium">{campaign.name}</td>
+                    <td className="py-4 px-6">
                       <span className={getStatusClass(campaign.status)}>
                         {getStatusIcon(campaign.status)}
                         <span className="ml-2 capitalize">{campaign.status}</span>
                       </span>
                     </td>
-                    <td className="py-4 text-dark-text">{campaign.sent}</td>
-                    <td className="py-4 text-dark-text">{campaign.replies}</td>
-                    <td className="py-4">
+                    <td className="py-4 px-6 text-dark-text">{campaign.sent}</td>
+                    <td className="py-4 px-6 text-dark-text">{campaign.replies}</td>
+                    <td className="py-4 px-6">
                       <span className="text-neon-blue font-medium">{campaign.rate}</span>
                     </td>
                   </tr>

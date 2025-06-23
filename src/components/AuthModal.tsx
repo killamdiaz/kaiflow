@@ -49,14 +49,14 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
   switch (authState) {
     case 'loading':
       return (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[9999] bg-dark-bg">
           <GlowingLoader message="KAIA is preparing your dashboard..." type="orb" />
         </div>
       );
       
     case 'welcome':
       return (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[9999] bg-dark-bg">
           <KAIAWelcome 
             userName={userEmail.split('@')[0]} 
             onContinue={handleWelcomeContinue}
@@ -66,7 +66,7 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
       
     case 'login':
       return (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[9999] bg-dark-bg">
           <LoginForm
             onLogin={handleLogin}
             onSwitchToSignup={() => setAuthState('signup')}
@@ -77,7 +77,7 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
       
     case 'signup':
       return (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[9999] bg-dark-bg">
           <SignupForm
             onSignup={handleSignup}
             onSwitchToLogin={() => setAuthState('login')}
@@ -87,7 +87,7 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
       
     case 'forgot':
       return (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[9999] bg-dark-bg">
           <ForgotPassword
             onBackToLogin={() => setAuthState('login')}
           />
