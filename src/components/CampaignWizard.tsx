@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Sparkles, Upload, Eye, Rocket, Save, Bot } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Sparkles, Upload, Eye, Rocket, Save, Bot, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EmailFeedbackPanel } from "./EmailFeedbackPanel";
@@ -25,6 +25,7 @@ interface CampaignData {
     email: string;
     company: string;
   }>;
+  selectedMailbox: string;
 }
 
 export function CampaignWizard({ onBack }: CampaignWizardProps) {
@@ -33,7 +34,8 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
     name: "",
     description: "",
     emails: [{ id: 1, subject: "", content: "", delay: 0 }],
-    leads: []
+    leads: [],
+    selectedMailbox: ""
   });
   const [isLaunched, setIsLaunched] = useState(false);
   const [showEmailFeedback, setShowEmailFeedback] = useState(false);
@@ -45,6 +47,12 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
     { id: 3, title: "Add Leads", description: "Import your contacts" },
     { id: 4, title: "Review Campaign", description: "Final check" },
     { id: 5, title: "Launch", description: "Go live!" }
+  ];
+
+  const mailboxes = [
+    { id: "1", email: "john@company.com", provider: "Gmail", status: "active" },
+    { id: "2", email: "sales@company.com", provider: "Outlook", status: "active" },
+    { id: "3", email: "outreach@company.com", provider: "Gmail", status: "warming" }
   ];
 
   const nextStep = () => {
@@ -120,6 +128,42 @@ export function CampaignWizard({ onBack }: CampaignWizardProps) {
                   value={campaignData.description}
                   onChange={(e) => setCampaignData({...campaignData, description: e.target.value})}
                 />
+              </div>
+
+              <div>
+                <label className="block text-dark-text font-medium mb-2">Select Mailbox *</label>
+                <div className="space-y-2">
+                  {mailboxes.map((mailbox) => (
+                    <div
+                      key={mailbox.id}
+                      className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                        campaignData.selectedMailbox === mailbox.id
+                          ? 'border-neon-blue bg-neon-blue/10'
+                          : 'border-dark-border bg-dark-bg hover:border-dark-muted'
+                      }`}
+                      onClick={() => setCampaignData({...campaignData, selectedMailbox: mailbox.id})}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Mail className="w-5 h-5 text-neon-blue" />
+                          <div>
+                            <p className="font-medium text-dark-text">{mailbox.email}</p>
+                            <p className="text-sm text-dark-muted">{mailbox.provider}</p>
+                          </div>
+                        </div>
+                        <span className={`status-badge ${
+                          mailbox.status === 'active' ? 'status-active' : 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                        }`}>
+                          {mailbox.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <button className="w-full p-4 border-2 border-dashed border-dark-border rounded-lg text-center text-dark-muted hover:border-neon-blue hover:text-neon-blue transition-colors">
+                    + Connect New Mailbox
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -1,8 +1,21 @@
 
-import { Bell, Search, Settings, User, Zap } from "lucide-react";
+import { Bell, Search, Settings, User, Zap, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { AuthModal } from "./AuthModal";
 
 export function Header() {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [user, setUser] = useState<string | null>(null);
+
+  const handleLogin = (email: string) => {
+    setUser(email);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
   return (
     <header className="h-16 bg-dark-card border-b border-dark-border flex items-center justify-between px-6">
       <div className="flex items-center space-x-4">
@@ -32,10 +45,35 @@ export function Header() {
           <Settings className="w-5 h-5 text-dark-muted" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="hover:bg-dark-bg">
-          <User className="w-5 h-5 text-dark-muted" />
-        </Button>
+        {user ? (
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-dark-text">{user}</span>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="hover:bg-dark-bg"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-5 h-5 text-dark-muted" />
+            </Button>
+          </div>
+        ) : (
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="hover:bg-dark-bg"
+            onClick={() => setIsAuthModalOpen(true)}
+          >
+            <User className="w-5 h-5 text-dark-muted" />
+          </Button>
+        )}
       </div>
+
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLogin={handleLogin}
+      />
     </header>
   );
 }

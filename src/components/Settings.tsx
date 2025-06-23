@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Save, Mail, Clock, Globe, Shield, Bell } from "lucide-react";
+import { Save, Mail, Clock, Globe, Shield, Bell, Link } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +10,7 @@ export function Settings() {
     { key: "smtp", label: "SMTP Configuration", icon: Mail },
     { key: "limits", label: "Sending Limits", icon: Clock },
     { key: "schedule", label: "Schedule", icon: Globe },
+    { key: "integrations", label: "Integrations", icon: Link },
     { key: "security", label: "Security", icon: Shield },
     { key: "notifications", label: "Notifications", icon: Bell }
   ];
@@ -70,7 +70,7 @@ export function Settings() {
             </div>
 
             <div className="pt-6 border-t border-dark-border">
-              <h4 className="font-semibold text-dark-text mb-3">Connected Accounts</h4>
+              <h4 className="font-semibold text-dark-text mb-3">Connected Mailboxes</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-4 bg-dark-bg rounded-lg border border-dark-border">
                   <div className="flex items-center space-x-3">
@@ -84,6 +84,121 @@ export function Settings() {
                   </div>
                   <span className="status-badge status-active">Active</span>
                 </div>
+                
+                <button className="w-full p-4 border-2 border-dashed border-dark-border rounded-lg text-center text-dark-muted hover:border-neon-blue hover:text-neon-blue transition-colors">
+                  + Add New Mailbox
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "integrations":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-dark-text mb-4">CRM Integrations</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="cyber-card">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold">SF</span>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-dark-text">Salesforce</h4>
+                          <p className="text-sm text-dark-muted">Not connected</p>
+                        </div>
+                      </div>
+                      <button className="cyber-button text-sm py-2 px-4">Connect</button>
+                    </div>
+                    <p className="text-sm text-dark-muted">Sync leads and track email engagement in Salesforce.</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="cyber-card">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold">HS</span>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-dark-text">HubSpot</h4>
+                          <p className="text-sm text-dark-muted">Connected</p>
+                        </div>
+                      </div>
+                      <span className="status-badge status-active">Active</span>
+                    </div>
+                    <p className="text-sm text-dark-muted">Automatically sync contacts and email activities.</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="cyber-card">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold">PP</span>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-dark-text">Pipedrive</h4>
+                          <p className="text-sm text-dark-muted">Not connected</p>
+                        </div>
+                      </div>
+                      <button className="cyber-button text-sm py-2 px-4">Connect</button>
+                    </div>
+                    <p className="text-sm text-dark-muted">Import deals and contacts from Pipedrive.</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="cyber-card">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold">ZP</span>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-dark-text">Zapier</h4>
+                          <p className="text-sm text-dark-muted">Not connected</p>
+                        </div>
+                      </div>
+                      <button className="cyber-button text-sm py-2 px-4">Connect</button>
+                    </div>
+                    <p className="text-sm text-dark-muted">Connect with 1000+ apps via Zapier automation.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-dark-border">
+              <h4 className="font-semibold text-dark-text mb-4">Lead Enrichment</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="cyber-card">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h5 className="font-medium text-dark-text">Apollo</h5>
+                        <p className="text-sm text-dark-muted">Contact enrichment</p>
+                      </div>
+                      <button className="cyber-button text-sm py-2 px-4">Connect</button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="cyber-card">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h5 className="font-medium text-dark-text">ZoomInfo</h5>
+                        <p className="text-sm text-dark-muted">Lead intelligence</p>
+                      </div>
+                      <button className="cyber-button text-sm py-2 px-4">Connect</button>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>

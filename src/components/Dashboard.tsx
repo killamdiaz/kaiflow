@@ -1,7 +1,20 @@
 import { BarChart3, Mail, Users, TrendingUp, Play, Clock, CheckCircle, AlertCircle, FileText, Plus, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const chartData = [
+  { name: 'Jan', emails: 400, opens: 240, replies: 48 },
+  { name: 'Feb', emails: 300, opens: 139, replies: 28 },
+  { name: 'Mar', emails: 500, opens: 280, replies: 65 },
+  { name: 'Apr', emails: 278, opens: 189, replies: 42 },
+  { name: 'May', emails: 189, opens: 139, replies: 31 },
+  { name: 'Jun', emails: 239, opens: 180, replies: 45 },
+];
 
 export function Dashboard() {
+  const navigate = useNavigate();
+
   const stats = [
     {
       title: "Total Campaigns",
@@ -79,7 +92,10 @@ export function Dashboard() {
           <h1 className="text-3xl font-bold gradient-text">Dashboard</h1>
           <p className="text-dark-muted mt-1">Monitor your cold email campaigns performance</p>
         </div>
-        <button className="cyber-button">
+        <button 
+          className="cyber-button"
+          onClick={() => navigate('/campaigns')}
+        >
           <Mail className="w-4 h-4 mr-2" />
           New Campaign
         </button>
@@ -140,11 +156,39 @@ export function Dashboard() {
             <CardTitle className="text-dark-text">Campaign Performance</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 bg-dark-bg rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <BarChart3 className="w-12 h-12 text-neon-blue mx-auto mb-4" />
-                <p className="text-dark-muted">Chart visualization would go here</p>
-              </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorEmails" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#00D9FF" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#00D9FF" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorOpens" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#A855F7" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#A855F7" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorReplies" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="name" stroke="#9CA3AF" />
+                  <YAxis stroke="#9CA3AF" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1F2937', 
+                      border: '1px solid #374151',
+                      borderRadius: '8px',
+                      color: '#F9FAFB'
+                    }}
+                  />
+                  <Area type="monotone" dataKey="emails" stroke="#00D9FF" fillOpacity={1} fill="url(#colorEmails)" />
+                  <Area type="monotone" dataKey="opens" stroke="#A855F7" fillOpacity={1} fill="url(#colorOpens)" />
+                  <Area type="monotone" dataKey="replies" stroke="#10B981" fillOpacity={1} fill="url(#colorReplies)" />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
@@ -172,7 +216,10 @@ export function Dashboard() {
               <CardTitle className="text-dark-text">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-blue/10 transition-colors">
+              <button 
+                onClick={() => navigate('/campaigns')}
+                className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-blue/10 transition-colors"
+              >
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-neon-blue" />
                   <div>
@@ -182,7 +229,10 @@ export function Dashboard() {
                 </div>
               </button>
               
-              <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-purple/10 transition-colors">
+              <button 
+                onClick={() => navigate('/leads')}
+                className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-purple/10 transition-colors"
+              >
                 <div className="flex items-center space-x-3">
                   <Users className="w-5 h-5 text-neon-purple" />
                   <div>
@@ -192,7 +242,10 @@ export function Dashboard() {
                 </div>
               </button>
               
-              <button className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-green/10 transition-colors">
+              <button 
+                onClick={() => navigate('/templates')}
+                className="w-full text-left p-4 rounded-lg bg-dark-bg hover:bg-neon-green/10 transition-colors"
+              >
                 <div className="flex items-center space-x-3">
                   <FileText className="w-5 h-5 text-neon-green" />
                   <div>

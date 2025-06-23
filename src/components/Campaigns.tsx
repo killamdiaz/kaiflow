@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { Plus, Play, Pause, BarChart3, Mail, Users, Calendar, Search, Filter } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CampaignWizard } from "./CampaignWizard";
 import { AIAssistant } from "./AIAssistant";
+import { CampaignTableControls } from "./CampaignTableControls";
 
 interface Campaign {
   id: number;
@@ -17,12 +17,33 @@ interface Campaign {
   replyRate: string;
   createdAt: string;
   lastActivity: string;
+  bounceRate?: string;
+  clickRate?: string;
+  unsubscribeRate?: string;
+}
+
+interface Column {
+  key: string;
+  label: string;
+  visible: boolean;
 }
 
 export function Campaigns() {
   const [showBuilder, setShowBuilder] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [columns, setColumns] = useState<Column[]>([
+    { key: 'name', label: 'Campaign', visible: true },
+    { key: 'status', label: 'Status', visible: true },
+    { key: 'leads', label: 'Leads', visible: true },
+    { key: 'sent', label: 'Sent', visible: true },
+    { key: 'openRate', label: 'Open Rate', visible: true },
+    { key: 'replyRate', label: 'Reply Rate', visible: true },
+    { key: 'lastActivity', label: 'Last Activity', visible: true },
+    { key: 'bounceRate', label: 'Bounce Rate', visible: false },
+    { key: 'clickRate', label: 'Click Rate', visible: false },
+    { key: 'unsubscribeRate', label: 'Unsubscribe Rate', visible: false },
+  ]);
 
   const campaigns: Campaign[] = [
     {
@@ -36,7 +57,10 @@ export function Campaigns() {
       openRate: "30.0%",
       replyRate: "6.7%",
       createdAt: "2024-01-15",
-      lastActivity: "2 hours ago"
+      lastActivity: "2 hours ago",
+      bounceRate: "2.1%",
+      clickRate: "8.5%",
+      unsubscribeRate: "0.8%"
     },
     {
       id: 2,
@@ -49,7 +73,10 @@ export function Campaigns() {
       openRate: "60.0%",
       replyRate: "15.0%",
       createdAt: "2024-01-10",
-      lastActivity: "1 day ago"
+      lastActivity: "1 day ago",
+      bounceRate: "1.5%",
+      clickRate: "12.3%",
+      unsubscribeRate: "0.5%"
     },
     {
       id: 3,
@@ -62,7 +89,10 @@ export function Campaigns() {
       openRate: "0.0%",
       replyRate: "0.0%",
       createdAt: "2024-01-20",
-      lastActivity: "3 days ago"
+      lastActivity: "3 days ago",
+      bounceRate: "0.0%",
+      clickRate: "0.0%",
+      unsubscribeRate: "0.0%"
     }
   ];
 
@@ -97,6 +127,51 @@ export function Campaigns() {
     const matchesStatus = statusFilter === "all" || campaign.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const handleColumnToggle = (key: string) => {
+    setColumns(prev => prev.map(col => 
+      col.key === key ? { ...col, visible: !col.visible } : col
+    ));
+  };
+
+  const visibleColumns = columns.filter(col => col.visible);
+
+  const renderCellValue = (campaign: Campaign, columnKey: string) => {
+    switch (columnKey) {
+      case 'name':
+        return (
+          <div>
+            <p className="font-medium text-dark-text">{campaign.name}</p>
+            <p className="text-sm text-dark-muted">Created {campaign.createdAt}</p>
+          </div>
+        );
+      case 'status':
+        return (
+          <span className={getStatusClass(campaign.status)}>
+            {getStatusIcon(campaign.status)}
+            <span className="ml-2 capitalize">{campaign.status}</span>
+          </span>
+        );
+      case 'leads':
+        return <span className="text-dark-text font-medium">{campaign.leads}</span>;
+      case 'sent':
+        return <span className="text-dark-text">{campaign.sent}</span>;
+      case 'openRate':
+        return <span className="text-neon-blue font-medium">{campaign.openRate}</span>;
+      case 'replyRate':
+        return <span className="text-neon-green font-medium">{campaign.replyRate}</span>;
+      case 'lastActivity':
+        return <span className="text-dark-muted">{campaign.lastActivity}</span>;
+      case 'bounceRate':
+        return <span className="text-red-400 font-medium">{campaign.bounceRate}</span>;
+      case 'clickRate':
+        return <span className="text-neon-purple font-medium">{campaign.clickRate}</span>;
+      case 'unsubscribeRate':
+        return <span className="text-orange-400 font-medium">{campaign.unsubscribeRate}</span>;
+      default:
+        return null;
+    }
+  };
 
   if (showBuilder) {
     return (
@@ -207,31 +282,15 @@ export function Campaigns() {
         </Card>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-dark-muted" />
-          <input
-            type="text"
-            placeholder="Search campaigns..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="cyber-input pl-10 w-full"
-          />
-        </div>
-        
-        <select 
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="cyber-input w-auto"
-        >
-          <option value="all">All Status</option>
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-          <option value="draft">Draft</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div>
+      {/* Table Controls */}
+      <CampaignTableControls
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+        columns={columns}
+        onColumnToggle={handleColumnToggle}
+      />
 
       {/* Campaigns Table */}
       <Card className="cyber-card">
@@ -240,42 +299,24 @@ export function Campaigns() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="border-b border-dark-border">
-                  <th className="text-left py-3 text-dark-muted font-medium">Campaign</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Status</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Leads</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Sent</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Open Rate</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Reply Rate</th>
-                  <th className="text-left py-3 text-dark-muted font-medium">Last Activity</th>
+                  {visibleColumns.map((column) => (
+                    <th key={column.key} className="text-left py-3 px-4 text-dark-muted font-medium whitespace-nowrap">
+                      {column.label}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {filteredCampaigns.map((campaign) => (
                   <tr key={campaign.id} className="border-b border-dark-border/50 hover:bg-dark-card/50 transition-colors cursor-pointer">
-                    <td className="py-4">
-                      <div>
-                        <p className="font-medium text-dark-text">{campaign.name}</p>
-                        <p className="text-sm text-dark-muted">Created {campaign.createdAt}</p>
-                      </div>
-                    </td>
-                    <td className="py-4">
-                      <span className={getStatusClass(campaign.status)}>
-                        {getStatusIcon(campaign.status)}
-                        <span className="ml-2 capitalize">{campaign.status}</span>
-                      </span>
-                    </td>
-                    <td className="py-4 text-dark-text font-medium">{campaign.leads}</td>
-                    <td className="py-4 text-dark-text">{campaign.sent}</td>
-                    <td className="py-4">
-                      <span className="text-neon-blue font-medium">{campaign.openRate}</span>
-                    </td>
-                    <td className="py-4">
-                      <span className="text-neon-green font-medium">{campaign.replyRate}</span>
-                    </td>
-                    <td className="py-4 text-dark-muted">{campaign.lastActivity}</td>
+                    {visibleColumns.map((column) => (
+                      <td key={column.key} className="py-4 px-4 whitespace-nowrap">
+                        {renderCellValue(campaign, column.key)}
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
