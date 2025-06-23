@@ -13,12 +13,11 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       {/* Animated Grid Background */}
       <div className="fixed inset-0 opacity-30 pointer-events-none">
         <div 
-          className="w-full h-full animate-pulse"
+          className="w-full h-full animate-grid-float"
           style={{
             backgroundImage: `radial-gradient(circle, #00D9FF 1px, transparent 1px)`,
             backgroundSize: '40px 40px',
             backgroundPosition: '0 0',
-            animation: 'grid-float 6s ease-in-out infinite'
           }}
         />
       </div>
@@ -52,15 +51,6 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
           </div>
         </div>
       </div>
-      
-      <style jsx>{`
-        @keyframes grid-float {
-          0%, 100% { transform: translate(0, 0); }
-          25% { transform: translate(-10px, -5px); }
-          50% { transform: translate(5px, -10px); }
-          75% { transform: translate(-5px, 5px); }
-        }
-      `}</style>
     </div>
   );
 }
